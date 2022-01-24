@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/transparent">
+    <com.airbnb.lottie.LottieAnimationView
+        android:background="@android:color/transparent"
+        android:id="@+id/animationView"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        />
+</androidx.appcompat.widget.LinearLayoutCompat>
