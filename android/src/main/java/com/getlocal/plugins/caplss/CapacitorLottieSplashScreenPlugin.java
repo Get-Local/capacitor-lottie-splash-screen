@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,10 @@ public class CapacitorLottieSplashScreenPlugin extends Plugin {
     public void ShowLottieSplashScreenDialog(){
         Context context = this.getContext();
         Dialog dialog = new Dialog(context, R.style.AppTheme_GetLocalLottieSplashScreen);
+        dialog.getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        );
         dialog.setContentView(R.layout.activity_lottie_splash_screen);
         dialog.setCancelable(false);
         loadLottie(dialog);
@@ -47,7 +52,7 @@ public class CapacitorLottieSplashScreenPlugin extends Plugin {
         LottieAnimationView lottieAnimationView = dialog.findViewById(R.id.animationView);
         lottieAnimationView.setAnimation(lottiePath);
         lottieAnimationView.setRepeatCount(0);
-        lottieAnimationView.setSpeed(0.5F);
+        lottieAnimationView.setSpeed(1F);
         lottieAnimationView.playAnimation();
         lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
