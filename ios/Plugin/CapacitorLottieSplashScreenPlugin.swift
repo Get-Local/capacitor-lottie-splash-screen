@@ -1,11 +1,10 @@
 import Foundation
 import Capacitor
-import Lottie
 
 @objc(CapacitorLottieSplashScreenPlugin)
 public class CapacitorLottieSplashScreenPlugin: CAPPlugin {
     private let implementation = CapacitorLottieSplashScreen()
-    private var animationView: AnimationView?
+    
     
     @objc func echo(_ call: CAPPluginCall) {
         let value = call.getString("value") ?? ""
@@ -15,27 +14,28 @@ public class CapacitorLottieSplashScreenPlugin: CAPPlugin {
     }
     
     override public func load() {
-        loadLottie()
-    }
-
-    func loadLottie() {
-        if let view =  self.bridge?.viewController?.view,
-            let path = self.getConfigValue("LottieAnimationLocation") as? String,
-            let filename = path.components(separatedBy: ".").first {
-            print("CapacitorLottieSplashScreenPlugin =====>>>  found")
-            animationView = .init(name: filename)
-            animationView!.frame = UIScreen.main.bounds
-            animationView!.contentMode = .scaleAspectFit
-            animationView!.loopMode = .playOnce
-            animationView!.animationSpeed = 1
-            view.addSubview(animationView!)
-            animationView!.play { completed in
-                if completed {
-                    self.animationView?.removeFromSuperview()
-                }
-            }
-        } else {
-            print("CapacitorLottieSplashScreenPlugin =====>>> NOT found")
+        let isEnabled = getConfigValue("Enabled") as? Bool ?? true
+        if(isEnabled) {
+            implementation.loadLottie(view: self.bridge?.viewController?.view, path: self.getConfigValue("LottieAnimationLocation") as? String)
         }
+        implementation.onAnimationEvent = onAnimationEvent
     }
+    
+    public func onAnimationEvent(event: AnimationEventListener) {
+        print("onAnimationEvent",event.listenerEvent)
+        self.bridge?.triggerWindowJSEvent(eventName: event.listenerEvent)
+        self.notifyListeners(event.listenerEvent, data: nil)
+    }
+    
+    @objc func appLoaded(_ call: CAPPluginCall) {
+        implementation.onAppLoaded()
+        call.resolve()
+    }
+    
+    @objc func isAnimating(_ call: CAPPluginCall) {
+        call.resolve([
+            "isAnimating": implementation.isAnimating()
+        ])
+    }
+    
 }

@@ -12,16 +12,18 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.PluginResult;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "CapacitorLottieSplashScreen")
 public class CapacitorLottieSplashScreenPlugin extends Plugin {
-    private CapacitorLottieSplashScreen implementation = new CapacitorLottieSplashScreen();
+    private final CapacitorLottieSplashScreen implementation = new CapacitorLottieSplashScreen();
 
     @PluginMethod
     public void echo(PluginCall call) {
@@ -32,58 +34,34 @@ public class CapacitorLottieSplashScreenPlugin extends Plugin {
         call.resolve(ret);
     }
 
-    @PluginMethod
-    public void load(){
-        ShowLottieSplashScreenDialog();
+    public void load() {
+        boolean isEnabled = this.getConfig().getBoolean("Enabled", true);
+        if (isEnabled) ShowLottieSplashScreenDialog();
+        implementation.setAnimationEventListener(this::onAnimationEvent);
     }
 
-    public void ShowLottieSplashScreenDialog(){
+    public void onAnimationEvent(String event) {
+        bridge.triggerWindowJSEvent(event);
+        notifyListeners(event, null);
+    }
+
+    private void ShowLottieSplashScreenDialog() {
         Context context = this.getContext();
-        Dialog dialog = new Dialog(context, R.style.AppTheme_GetLocalLottieSplashScreen);
-        dialog.setContentView(R.layout.activity_lottie_splash_screen);
-        dialog.setCancelable(false);
-        loadLottie(dialog);
-
-
-        View decorView = dialog.getWindow().getDecorView();
-        int uiOptions = decorView.getSystemUiVisibility();
-        uiOptions = uiOptions | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-        dialog.getWindow().setStatusBarColor(Color.TRANSPARENT);
-        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-        dialog.show();
+        String lottiePath = this.getConfig().getString("LottieAnimationLocation");
+        implementation.ShowLottieSplashScreenDialog(context, lottiePath);
     }
 
-    public void loadLottie(Dialog dialog){
-        String lottiePath = this.getConfig().getString("LottieAnimationLocation");;
-        LottieAnimationView lottieAnimationView = dialog.findViewById(R.id.animationView);
-        lottieAnimationView.setAnimation(lottiePath);
-        lottieAnimationView.setRepeatCount(0);
-        lottieAnimationView.setSpeed(1F);
-        lottieAnimationView.playAnimation();
-        lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-            }
+    @PluginMethod
+    public void appLoaded(PluginCall call) {
+        implementation.onAppLoaded();
+        call.resolve();
+    }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                try {
-                    dialog.cancel();
-                } catch(Exception ex) {
-                    ex.toString();
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-            }
-
-        });
+    @PluginMethod
+    public void isAnimating(PluginCall call) {
+        boolean isAnimating = implementation.isAnimating();
+        JSObject ret = new JSObject();
+        ret.put("isAnimating", isAnimating);
+        call.resolve(ret);
     }
 }

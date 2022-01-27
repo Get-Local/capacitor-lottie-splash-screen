@@ -14,6 +14,10 @@ npx cap sync
 <docgen-index>
 
 * [`echo(...)`](#echo)
+* [`appLoaded()`](#apploaded)
+* [`isAnimating()`](#isanimating)
+* [`addListener('onAnimationEnd', ...)`](#addlisteneronanimationend)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -33,5 +37,53 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
 
 --------------------
+
+
+### appLoaded()
+
+```typescript
+appLoaded() => Promise<{}>
+```
+
+**Returns:** <code>Promise&lt;{}&gt;</code>
+
+--------------------
+
+
+### isAnimating()
+
+```typescript
+isAnimating() => Promise<{ isAnimating: boolean; }>
+```
+
+**Returns:** <code>Promise&lt;{ isAnimating: boolean; }&gt;</code>
+
+--------------------
+
+
+### addListener('onAnimationEnd', ...)
+
+```typescript
+addListener(eventName: 'onAnimationEnd', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+| Param              | Type                          |
+| ------------------ | ----------------------------- |
+| **`eventName`**    | <code>'onAnimationEnd'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code>    |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### Interfaces
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 </docgen-api>
