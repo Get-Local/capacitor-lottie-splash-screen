@@ -78,9 +78,8 @@ public class CapacitorLottieSplashScreen {
             public void onAnimationEnd(Animator animation) {
                 try {
                     isAnimationEnded = true;
-                    if(isAppLoaded) hideDialog();
                     animationEventListener.onAnimationEvent(ON_ANIMATION_END);
-
+                    if(isAppLoaded) hideDialog();
                 } catch(Exception ex) {
                     ex.toString();
                 }
