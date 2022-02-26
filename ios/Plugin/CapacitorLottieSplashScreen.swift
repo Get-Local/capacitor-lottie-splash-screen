@@ -20,7 +20,7 @@ extension AnimationEventListener {
     
     private var animationView: AnimationView?
     private var isAppLoaded = false
-    private var isAnimationEnded = false
+    private var isAnimationEnded = !CapacitorLottieSplashScreenPlugin.isEnabledStatic
     
     public typealias AnimationEventListenerCallback = (AnimationEventListener) -> Void
 

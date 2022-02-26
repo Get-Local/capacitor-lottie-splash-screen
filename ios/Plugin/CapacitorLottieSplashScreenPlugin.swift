@@ -3,6 +3,7 @@ import Capacitor
 
 @objc(CapacitorLottieSplashScreenPlugin)
 public class CapacitorLottieSplashScreenPlugin: CAPPlugin {
+    public static var isEnabledStatic = true
     private let implementation = CapacitorLottieSplashScreen()
     
     
@@ -14,11 +15,13 @@ public class CapacitorLottieSplashScreenPlugin: CAPPlugin {
     }
     
     override public func load() {
-        let isEnabled = getConfigValue("Enabled") as? Bool ?? true
-        if(isEnabled) {
-            implementation.loadLottie(view: self.bridge?.viewController?.view, path: self.getConfigValue("LottieAnimationLocation") as? String)
+        if(CapacitorLottieSplashScreenPlugin.isEnabledStatic){
+            let isEnabled = getConfigValue("Enabled") as? Bool ?? true
+            if(isEnabled) {
+                implementation.loadLottie(view: self.bridge?.viewController?.view, path: self.getConfigValue("LottieAnimationLocation") as? String)
+            }
+            implementation.onAnimationEvent = onAnimationEvent
         }
-        implementation.onAnimationEvent = onAnimationEvent
     }
     
     public func onAnimationEvent(event: AnimationEventListener) {
