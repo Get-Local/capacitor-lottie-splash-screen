@@ -21,7 +21,7 @@ public class CapacitorLottieSplashScreen {
     @Nullable
     AnimationEventListener animationEventListener;
     private boolean isAppLoaded = false;
-    private boolean isAnimationEnded = false;
+    private boolean isAnimationEnded = !CapacitorLottieSplashScreenPlugin.isEnabledStatic;
     final public static String ON_ANIMATION_END = "onAnimationEnd";
 
     Dialog dialog = null;
@@ -97,6 +97,6 @@ public class CapacitorLottieSplashScreen {
     }
 
     private void hideDialog(){
-        dialog.cancel();
+        if(dialog != null)  dialog.cancel();
     }
 }
