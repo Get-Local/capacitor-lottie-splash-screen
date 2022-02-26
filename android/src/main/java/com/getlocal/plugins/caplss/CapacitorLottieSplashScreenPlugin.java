@@ -24,6 +24,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 @CapacitorPlugin(name = "CapacitorLottieSplashScreen")
 public class CapacitorLottieSplashScreenPlugin extends Plugin {
     private final CapacitorLottieSplashScreen implementation = new CapacitorLottieSplashScreen();
+    public static boolean isEnabledStatic = true;
 
     @PluginMethod
     public void echo(PluginCall call) {
@@ -35,9 +36,11 @@ public class CapacitorLottieSplashScreenPlugin extends Plugin {
     }
 
     public void load() {
-        boolean isEnabled = this.getConfig().getBoolean("Enabled", true);
-        if (isEnabled) ShowLottieSplashScreenDialog();
-        implementation.setAnimationEventListener(this::onAnimationEvent);
+        if(isEnabledStatic) {
+            boolean isEnabled = this.getConfig().getBoolean("Enabled", true);
+            if (isEnabled) ShowLottieSplashScreenDialog();
+            implementation.setAnimationEventListener(this::onAnimationEvent);
+        }
     }
 
     public void onAnimationEvent(String event) {
