@@ -65,6 +65,8 @@ extension AnimationEventListener {
     }
     
     func hideSplashScreen() {
-        self.animationView?.removeFromSuperview()
+        DispatchQueue.main.async {
+            self.animationView?.removeFromSuperview()
+        }
     }
 }
